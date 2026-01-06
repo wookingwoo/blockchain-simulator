@@ -141,6 +141,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
   animation: float-in 0.6s ease both;
 }
 
@@ -226,6 +227,7 @@ h2 {
   background: rgba(0, 0, 0, 0.25);
   padding: 6px 8px;
   border-radius: 10px;
+  overflow-wrap: anywhere;
 }
 
 .panel-footer {
@@ -273,6 +275,7 @@ h2 {
 
 .header-value {
   margin-top: 6px;
+  overflow-wrap: anywhere;
 }
 
 .nonce-row {
@@ -355,6 +358,7 @@ h2 {
   border-radius: 16px;
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 .chain-header {
@@ -376,6 +380,7 @@ h2 {
   gap: 12px;
   overflow-x: auto;
   padding-bottom: 6px;
+  min-width: 0;
 }
 
 .block-card {
@@ -387,6 +392,10 @@ h2 {
   gap: 6px;
   min-width: 160px;
   animation: pop-in 0.4s ease both;
+}
+
+.block-card span {
+  overflow-wrap: anywhere;
 }
 
 .block-card.empty {

@@ -105,7 +105,12 @@ function truncateHash(hash) {
   if (!hash) {
     return "----";
   }
-  return `${hash.slice(0, 10)}...${hash.slice(-6)}`;
+  const head = 6;
+  const tail = 4;
+  if (hash.length <= head + tail + 3) {
+    return hash;
+  }
+  return `${hash.slice(0, head)}...${hash.slice(-tail)}`;
 }
 
 function getYourMiner() {
@@ -169,7 +174,8 @@ function updateDifficultyUI() {
 }
 
 function updateHeaderUI() {
-  elements.prevHash.textContent = state.prevHash;
+  elements.prevHash.textContent = truncateHash(state.prevHash);
+  elements.prevHash.title = state.prevHash;
   elements.txList.textContent = state.transactions;
   elements.blockHeight.textContent = state.blockHeight;
 }
@@ -179,6 +185,8 @@ function renderMiners() {
   elements.minerList.innerHTML = state.miners
     .map((miner) => {
       const status = miner.winner ? "winner" : "";
+      const hashPreview = truncateHash(miner.lastHash);
+      const hashTitle = miner.lastHash ? ` title="${miner.lastHash}"` : "";
       return `
         <article class="miner-card ${status}">
           <div class="miner-title">
@@ -197,7 +205,7 @@ function renderMiners() {
             <span>Rewards</span>
             <span>${miner.rewards.toFixed(2)}</span>
           </div>
-          <div class="miner-hash mono">${truncateHash(miner.lastHash)}</div>
+          <div class="miner-hash mono"${hashTitle}>${hashPreview}</div>
         </article>
       `;
     })
@@ -220,8 +228,8 @@ function renderChain() {
       (block) => `
         <div class="block-card">
           <strong>Block ${block.height}</strong>
-          <span class="mono">${truncateHash(block.hash)}</span>
-          <span>Prev: ${truncateHash(block.prevHash)}</span>
+          <span class="mono" title="${block.hash}">${truncateHash(block.hash)}</span>
+          <span title="${block.prevHash}">Prev: ${truncateHash(block.prevHash)}</span>
           <span>Miner: ${block.miner}</span>
         </div>
       `
