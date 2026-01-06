@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockchain Mining Simulator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Learning Playground</p>
+          <h1>Blockchain Mining Simulator</h1>
+          <p class="hero-subtitle">
+            Experience how miners compete to solve a hash puzzle, earn rewards, and
+            extend a chain you can watch grow in real time.
+          </p>
+          <div class="hero-actions">
+            <button class="btn ghost" id="start-tutorial">Guided Tour</button>
+            <button class="btn" id="reset-sim">Reset Simulation</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-label">Difficulty</span>
+            <span class="stat-value" id="difficulty-readout">2</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Blocks Mined</span>
+            <span class="stat-value" id="blocks-readout">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Total Rewards</span>
+            <span class="stat-value" id="rewards-readout">0</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel network">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Network</p>
+              <h2>Miners</h2>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="competition-toggle" />
+              <span>Competition Mode</span>
+            </label>
+          </div>
+          <div class="miner-list" id="miner-list"></div>
+          <div class="panel-footer">
+            <p class="footnote">
+              Each miner tries a different nonce. The first to satisfy the target wins
+              the block reward.
+            </p>
+          </div>
+        </section>
+
+        <section class="panel core">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Hash Puzzle</p>
+              <h2>Build the Block Header</h2>
+            </div>
+            <div class="difficulty-control">
+              <label for="difficulty-range">Difficulty</label>
+              <input
+                type="range"
+                id="difficulty-range"
+                min="1"
+                max="5"
+                value="2"
+              />
+              <span class="chip" id="difficulty-value">2</span>
+            </div>
+          </div>
+
+          <div class="puzzle-card">
+            <div class="header-grid">
+              <div>
+                <span class="header-label">Previous Hash</span>
+                <div class="header-value mono" id="prev-hash">GENESIS</div>
+              </div>
+              <div>
+                <span class="header-label">Transactions</span>
+                <div class="header-value" id="tx-list">TX-1-A1F3</div>
+              </div>
+              <div>
+                <span class="header-label">Nonce</span>
+                <div class="nonce-row">
+                  <input type="number" id="nonce-input" value="0" min="0" />
+                  <button class="btn slim" id="nonce-step">Increment</button>
+                  <button class="btn slim ghost" id="nonce-random">Randomize</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hash-panel">
+              <p class="hash-label">Hash Output</p>
+              <div class="hash-output mono" id="hash-output">----</div>
+              <div class="status-pill" id="hash-status">Searching</div>
+            </div>
+
+            <div class="control-row">
+              <button class="btn primary" id="auto-mine">Auto Mine</button>
+              <div class="meta-pill">
+                Target: <span id="target-text">00</span>
+              </div>
+              <div class="meta-pill">
+                Expected tries: <span id="expected-tries">256</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chain-card">
+            <div class="chain-header">
+              <h3>Blockchain</h3>
+              <span class="chain-note">Blocks link by previous hash</span>
+            </div>
+            <div class="chain-list" id="chain-list"></div>
+          </div>
+        </section>
+
+        <section class="panel explain">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Guide</p>
+              <h2>Why Mining Matters</h2>
+            </div>
+          </div>
+          <div class="explain-stack">
+            <article class="explain-card">
+              <h3>Unpredictable Hashes</h3>
+              <p>
+                Changing the nonce reshuffles the hash output. You cannot predict
+                which nonce will work, so miners must try many values.
+              </p>
+            </article>
+            <article class="explain-card">
+              <h3>Difficulty Controls</h3>
+              <p>
+                The target requires more leading zeros at higher difficulty. This
+                makes successful hashes rarer and block time longer.
+              </p>
+            </article>
+            <article class="explain-card">
+              <h3>Competition + Rewards</h3>
+              <p>
+                Miners race to find the first valid hash. The winner earns a block
+                reward, aligning incentives with securing the network.
+              </p>
+            </article>
+            <article class="explain-card subtle">
+              <h3>Education Notice</h3>
+              <p>
+                This simulator is for learning only. It simplifies cryptography and
+                does not produce real cryptocurrency.
+              </p>
+            </article>
+          </div>
+
+          <div class="status-card">
+            <h3>Live Status</h3>
+            <div class="status-row">
+              <span>Last winner</span>
+              <strong id="last-winner">-</strong>
+            </div>
+            <div class="status-row">
+              <span>Current block</span>
+              <strong id="block-height">1</strong>
+            </div>
+            <div class="status-row">
+              <span>Hash tries</span>
+              <strong id="total-tries">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel log">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Event Log</p>
+              <h2>Mining Activity</h2>
+            </div>
+            <button class="btn ghost slim" id="clear-log">Clear</button>
+          </div>
+          <div class="log-list" id="log-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="tutorial hidden" id="tutorial">
+      <div class="tutorial-card">
+        <h2>Quick Tour</h2>
+        <ol>
+          <li>Start at low difficulty and change the nonce to see the hash shift.</li>
+          <li>Raise difficulty to feel how rare valid hashes become.</li>
+          <li>Enable competition mode to watch miners race each other.</li>
+          <li>Each winning block adds to the chain and pays a reward.</li>
+        </ol>
+        <button class="btn primary" id="close-tutorial">Start Mining</button>
+      </div>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
